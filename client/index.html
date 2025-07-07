@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5962/5962463.png">
+    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
     <title>Realtime Chat!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- SEO tags -->
     <meta name="description" content="Chat en tiempo real con Node.js y Socket.io">
@@ -21,27 +23,28 @@
 
     <!-- CDN -->
      <script crossorigin="anonymous" integrity="sha256-Lfgh4c+xY/FqajT28Omn4hGTf0DE/vxSLDekfNrGA8M=" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+     
+     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <!-- /CDN -->
 </head>
-<body class="bg-black text-white">
-    <div class="border border-white w-[50vw] h-[80vh] m-auto flex flex-col mt-[8vh] flex-1 justify-end rounded-sm overflow-auto">
-        <div id="container" class="flex flex-col justify-center items-center gap-5"></div>
-        <div class="w-[50%] mx-auto">
-            <label for="msg">
-                <span class="text-sm font-medium text-white"> Mensaje </span>
-
+<body class="bg-sky-300 text-black">
+    <div class="shadow-xl shadow-purple-400 border-4 bg-white border-purple-400 
+        w-[95vw] max-w-2xl h-[90vh] max-h-[90vh] m-auto flex flex-col mt-6 flex-1 justify-end rounded-sm overflow-auto
+        sm:w-[80vw] md:w-[60vw] lg:w-[50vw]">
+        <div id="container" class="flex flex-col gap-3 px-2 py-4 flex-1 justify-end"></div>
+        <div class="w-full max-w-md mx-auto px-2 pb-4">
+            <label for="msg" class="block">
+                <span class="text-sm font-medium text-black"> Mensaje </span>
                 <div class="relative mt-0.5 overflow-hidden rounded border border-gray-300 shadow-sm focus-within:ring focus-within:ring-blue-600">
-                    <textarea id="msg" class="w-[100%] font-bold resize-none border-none focus:ring-0 sm:text-sm"
-                        rows="4" maxlength="80"></textarea>
-
-                    <div class="flex items-center justify-end gap-2 p-1.5 bg-white">
+                    <textarea id="msg" class="w-full font-bold resize-none border-none focus:ring-0 sm:text-sm"
+                        rows="3" maxlength="80"></textarea>
+                    <div class="flex items-center justify-end gap-2 p-1.5 bg-black">
                         <button type="button"
                             id="msg-del"
-                            class="rounded border border-transparent px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900">
+                            class="rounded border border-transparent px-3 py-1.5 text-sm font-medium text-white transition-colors hover:text-gray-900">
                             Borrar
                         </button>
-
-                        <button id="msg-send" type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100">
+                        <button id="msg-send" type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-gray-100">
                             Enviar
                         </button>
                     </div>
@@ -104,8 +107,11 @@
     </script>
 
     <style type="text/tailwindcss">
+        body {
+            font-family: "Pixelify Sans";
+        }
         p {
-            @apply border border-white bg-sky-600 w-auto h-auto text-center rounded-sm font-serif
+            @apply border border-white bg-sky-600 w-auto h-auto text-center rounded-sm font-serif min-w-10 min-h-5
         }
     </style>
 </body>
