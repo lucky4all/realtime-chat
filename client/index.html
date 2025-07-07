@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5962/5962463.png">
+    <title>Realtime Chat!</title>
+
+    <!-- SEO tags -->
+    <meta name="description" content="Chat en tiempo real con Node.js y Socket.io">
+    <meta name="keywords" content="chat, realtime, nodejs, socket.io, web">
+    <meta name="author" content="Luckydev">
+    <meta property="og:title" content="Realtime Chat!">
+    <meta property="og:description" content="Chat en tiempo real con Node.js y Socket.io">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="canonical" href="">
+    <!-- /SEO tags -->
+
+    <!-- CDN -->
+     <script crossorigin="anonymous" integrity="sha256-Lfgh4c+xY/FqajT28Omn4hGTf0DE/vxSLDekfNrGA8M=" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- /CDN -->
+</head>
+<body class="bg-black text-white">
+    <div class="border border-white w-[50vw] h-[80vh] m-auto flex flex-col mt-[8vh] flex-1 justify-end rounded-sm overflow-auto">
+        <div id="container" class="flex flex-col justify-center items-center gap-5"></div>
+        <div class="w-[50%] mx-auto">
+            <label for="msg">
+                <span class="text-sm font-medium text-white"> Mensaje </span>
+
+                <div class="relative mt-0.5 overflow-hidden rounded border border-gray-300 shadow-sm focus-within:ring focus-within:ring-blue-600">
+                    <textarea id="msg" class="w-[100%] font-bold resize-none border-none focus:ring-0 sm:text-sm"
+                        rows="4" maxlength="80"></textarea>
+
+                    <div class="flex items-center justify-end gap-2 p-1.5 bg-white">
+                        <button type="button"
+                            id="msg-del"
+                            class="rounded border border-transparent px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:text-gray-900">
+                            Borrar
+                        </button>
+
+                        <button id="msg-send" type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100">
+                            Enviar
+                        </button>
+                    </div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+        const socket = io();
+        const my_id = socket.id;
+
+        const SEND_BUTTON = document.getElementById("msg-send");
+        const DEL_BUTTON = document.getElementById("msg-del");
+
+        
+        function newDomElement(data) {
+            const text = document.createElement("p");
+            text.textContent = data.toLowerCase();
+            const contenedor = document.getElementById("container");
+            contenedor.appendChild(text)
+        }
+
+        socket.on('message', (args) => {
+            newDomElement(args);
+        })
+    
+
+        SEND_BUTTON.addEventListener('click', function() {
+            const MSG = document.getElementById("msg")
+            if (MSG.value === '') {
+                alert("No se puede enviar ese mensaje!");
+                return;
+            } else {
+                socket.emit("message", MSG.value)
+            }
+            MSG.value = '';
+        })
+
+        DEL_BUTTON.addEventListener('click', function() {
+            const MSG = document.getElementById("msg");
+            MSG.value = ''
+        })
+
+        /* Lógica para auto-posteo al presionar intro */
+        document.addEventListener('keydown', (event) => {
+                const MSG = document.getElementById("msg");
+
+                if (event.code === 'Enter') {
+                    if (MSG.value === '') {
+                        alert("No se puede enviar ese mensaje!");
+                        return;
+                    } else {
+                        handleSocket(MSG.value);
+                        MSG.value = '';
+                    }
+                }
+            })
+    </script>
+
+    <style type="text/tailwindcss">
+        p {
+            @apply border border-white bg-sky-600 w-auto h-auto text-center rounded-sm font-serif
+        }
+    </style>
+</body>
+</html>
