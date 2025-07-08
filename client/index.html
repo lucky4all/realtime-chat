@@ -88,22 +88,39 @@
 
   <script type="module">
     import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-    const socket = io("https://realtime-chat-mb0z.onrender.com");
+    const socket = io();
     const my_id = socket.id;
 
     const SEND_BUTTON = document.getElementById("msg-send");
     const DEL_BUTTON = document.getElementById("msg-del");
 
-    function newDomElement(data) {
+    function handleUser() {
+        let res = sessionStorage.getItem("username");
+        if (!res) {
+            let newuser = prompt("Ingrese su nombre de usuario");
+            sessionStorage.setItem("username", newuser);
+            return newuser
+        } else {
+            return res
+        }
+    }
+
+    const user = handleUser();
+
+    function newDomElement(data, user) {
       const text = document.createElement("p");
+      const name = document.createElement("p");
+      name.style.color = "yellow";
       text.textContent = data;
+      name.textContent = `usuario: ${user ?? "invitado"}`;
       const contenedor = document.getElementById("container");
       contenedor.appendChild(text);
+      text.appendChild(name)
       contenedor.scrollTop = contenedor.scrollHeight;
     }
 
     socket.on('message', (args) => {
-      newDomElement(args);
+      newDomElement(args, user);
     });
 
     SEND_BUTTON.addEventListener('click', function() {
