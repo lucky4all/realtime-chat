@@ -7,11 +7,50 @@
   <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
   <title>Realtime Chat!</title>
 
+  <!-- SEO tags -->
+  <meta name="description" content="Chat en tiempo real con diseño retro. ¡Únete y conversa al instante!">
+  <meta name="keywords" content="chat, realtime, tiempo real, retro, nes, pixel, conversación, web">
+  <meta name="author" content="Luckydev">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Realtime Chat!">
+  <meta property="og:description" content="Chat en tiempo real con diseño retro. ¡Únete y conversa al instante!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="Luckydev">
+  <meta property="og:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Realtime Chat!">
+  <meta name="twitter:description" content="Chat en tiempo real con diseño retro. ¡Únete y conversa al instante!">
+  <meta name="twitter:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
+<!-- /SEO tags -->
+
   <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 
+</head>
+<body>
+  <section id="chat-box" class="nes-container with-title is-dark">
+    <h2 class="title">Realtime Chat</h2>
+
+    <div id="container"></div>
+
+    <label for="msg">Mensaje:</label>
+    <textarea id="msg" class="nes-textarea" rows="3" maxlength="80" placeholder="Me gustan los trenes..."></textarea>
+
+    <div style="margin-top: 0.5rem;" class="flex-buttons">
+      <button id="msg-del" type="button" class="nes-btn is-error">Borrar</button>
+      <button id="msg-send" type="button" class="nes-btn is-primary">Enviar</button>
+    </div>
+  </section>
 
   <style>
+
+    @media (max-width: 666px) {
+        #container {
+            height: 50vh;
+            width: 100%;
+        }
+    }
+
     body {
       background-color: #87ceeb;
       font-family: "Pixelify Sans", sans-serif;
@@ -44,22 +83,8 @@
     textarea {
       resize: none;
     }
+
   </style>
-</head>
-<body>
-  <section id="chat-box" class="nes-container with-title is-dark">
-    <h2 class="title">Realtime Chat</h2>
-
-    <div id="container"></div>
-
-    <label for="msg">Mensaje:</label>
-    <textarea id="msg" class="nes-textarea" rows="3" maxlength="80"></textarea>
-
-    <div style="margin-top: 0.5rem;" class="flex-buttons">
-      <button id="msg-del" type="button" class="nes-btn is-error">Borrar</button>
-      <button id="msg-send" type="button" class="nes-btn is-primary">Enviar</button>
-    </div>
-  </section>
 
   <script type="module">
     import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
