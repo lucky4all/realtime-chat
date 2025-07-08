@@ -1,118 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="cache-control" content="no-cache">
-    <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
-    <title>Realtime Chat!</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRRk3fE4QNc71zMZNxic07lGpqJruIX5d1Lg&s">
+  <title>Realtime Chat!</title>
 
-    <!-- SEO tags -->
-    <meta name="description" content="Chat en tiempo real con Node.js y Socket.io">
-    <meta name="keywords" content="chat, realtime, nodejs, socket.io, web">
-    <meta name="author" content="Luckydev">
-    <meta property="og:title" content="Realtime Chat!">
-    <meta property="og:description" content="Chat en tiempo real con Node.js y Socket.io">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <link rel="canonical" href="">
-    <!-- /SEO tags -->
+  <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 
-    <!-- CDN -->
-     <script crossorigin="anonymous" integrity="sha256-Lfgh4c+xY/FqajT28Omn4hGTf0DE/vxSLDekfNrGA8M=" src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-     
-     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-    <!-- /CDN -->
+
+  <style>
+    body {
+      background-color: #87ceeb;
+      font-family: "Pixelify Sans", sans-serif;
+      padding: 2rem;
+    }
+
+    #chat-box {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    #container {
+      height: 60vh;
+      overflow-y: auto;
+      padding: 1rem;
+      background: white;
+      border: 4px solid #000;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    #container p {
+      background-color: #209cee;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    textarea {
+      resize: none;
+    }
+  </style>
 </head>
-<body class="bg-sky-300 text-black">
-    <div class="shadow-xl shadow-purple-400 border-4 bg-white border-purple-400 
-        w-[95vw] max-w-2xl h-[90vh] max-h-[90vh] m-auto flex flex-col mt-6 flex-1 justify-end rounded-sm overflow-auto
-        sm:w-[80vw] md:w-[60vw] lg:w-[50vw]">
-        <div id="container" class="flex flex-col gap-3 px-2 py-4 flex-1 justify-end"></div>
-        <div class="w-full max-w-md mx-auto px-2 pb-4">
-            <label for="msg" class="block">
-                <span class="text-sm font-medium text-black"> Mensaje </span>
-                <div class="relative mt-0.5 overflow-hidden rounded border border-gray-300 shadow-sm focus-within:ring focus-within:ring-blue-600">
-                    <textarea id="msg" class="w-full font-bold resize-none border-none focus:ring-0 sm:text-sm"
-                        rows="3" maxlength="80"></textarea>
-                    <div class="flex items-center justify-end gap-2 p-1.5 bg-black">
-                        <button type="button"
-                            id="msg-del"
-                            class="rounded border border-transparent px-3 py-1.5 text-sm font-medium text-white transition-colors hover:text-gray-900">
-                            Borrar
-                        </button>
-                        <button id="msg-send" type="button" class="rounded border border-gray-300 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-gray-100">
-                            Enviar
-                        </button>
-                    </div>
-                </div>
-            </label>
-        </div>
+<body>
+  <section id="chat-box" class="nes-container with-title is-dark">
+    <h2 class="title">Realtime Chat</h2>
+
+    <div id="container"></div>
+
+    <label for="msg">Mensaje:</label>
+    <textarea id="msg" class="nes-textarea" rows="3" maxlength="80"></textarea>
+
+    <div style="margin-top: 0.5rem;" class="flex-buttons">
+      <button id="msg-del" type="button" class="nes-btn is-error">Borrar</button>
+      <button id="msg-send" type="button" class="nes-btn is-primary">Enviar</button>
     </div>
+  </section>
 
-    <script type="module">
-        import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-        const socket = io("https://realtime-chat-mb0z.onrender.com/");
-        const my_id = socket.id;
+  <script type="module">
+    import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+    const socket = io();
+    const my_id = socket.id;
 
-        const SEND_BUTTON = document.getElementById("msg-send");
-        const DEL_BUTTON = document.getElementById("msg-del");
+    const SEND_BUTTON = document.getElementById("msg-send");
+    const DEL_BUTTON = document.getElementById("msg-del");
 
-        
-        function newDomElement(data) {
-            const text = document.createElement("p");
-            text.textContent = data.toLowerCase();
-            const contenedor = document.getElementById("container");
-            contenedor.appendChild(text)
+    function newDomElement(data) {
+      const text = document.createElement("p");
+      text.textContent = data;
+      const contenedor = document.getElementById("container");
+      contenedor.appendChild(text);
+      contenedor.scrollTop = contenedor.scrollHeight;
+    }
+
+    socket.on('message', (args) => {
+      newDomElement(args);
+    });
+
+    SEND_BUTTON.addEventListener('click', function() {
+      const MSG = document.getElementById("msg");
+      if (MSG.value === '') {
+        alert("No se puede enviar ese mensaje!");
+        return;
+      } else {
+        socket.emit("message", MSG.value);
+        MSG.value = '';
+      }
+    });
+
+    DEL_BUTTON.addEventListener('click', function() {
+      const MSG = document.getElementById("msg");
+      MSG.value = '';
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const MSG = document.getElementById("msg");
+      if (event.code === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        if (MSG.value === '') {
+          alert("No se puede enviar ese mensaje!");
+        } else {
+          socket.emit("message", MSG.value);
+          MSG.value = '';
         }
-
-        socket.on('message', (args) => {
-            newDomElement(args);
-        })
-    
-
-        SEND_BUTTON.addEventListener('click', function() {
-            const MSG = document.getElementById("msg")
-            if (MSG.value === '') {
-                alert("No se puede enviar ese mensaje!");
-                return;
-            } else {
-                socket.emit("message", MSG.value)
-            }
-            MSG.value = '';
-        })
-
-        DEL_BUTTON.addEventListener('click', function() {
-            const MSG = document.getElementById("msg");
-            MSG.value = ''
-        })
-
-        /* Lógica para auto-posteo al presionar intro */
-        document.addEventListener('keydown', (event) => {
-                const MSG = document.getElementById("msg");
-
-                if (event.code === 'Enter') {
-                    if (MSG.value === '') {
-                        alert("No se puede enviar ese mensaje!");
-                        return;
-                    } else {
-                        handleSocket(MSG.value);
-                        MSG.value = '';
-                    }
-                }
-            })
-    </script>
-
-    <style type="text/tailwindcss">
-        body {
-            font-family: "Pixelify Sans";
-        }
-        p {
-            @apply border border-white bg-sky-600 w-auto h-auto text-center rounded-sm font-serif min-w-10 min-h-5
-        }
-    </style>
+      }
+    });
+  </script>
 </body>
 </html>
