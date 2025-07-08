@@ -70,6 +70,8 @@
       border: 4px solid #000;
       border-radius: 4px;
       margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
     }
 
     #container p {
@@ -88,7 +90,7 @@
 
   <script type="module">
     import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-    const socket = io();
+    const socket = io("https://realtime-chat-mb0z.onrender.com");
     const my_id = socket.id;
 
     const SEND_BUTTON = document.getElementById("msg-send");
@@ -111,6 +113,8 @@
       const text = document.createElement("p");
       const name = document.createElement("p");
       name.style.color = "yellow";
+      name.style.order = "1"
+      text.style.order = "2"
       text.textContent = data;
       name.textContent = `usuario: ${user ?? "invitado"}`;
       const contenedor = document.getElementById("container");
