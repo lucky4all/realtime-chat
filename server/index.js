@@ -6,6 +6,8 @@ import morgan from 'morgan';
 import path from 'node:path';
 import { Server } from 'socket.io'
 import { createServer } from 'node:http';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -31,9 +33,23 @@ io.on('connection', (socket) => {
 Middlewares de Express.js
 */
 
-app.use(cors())
-// app.use(helmet())
+app.use(cors({
+    origin: ['https://realtime-chat-mb0z.onrender.com/'],
+    methods: ['GET'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
+}))
+
+app.use(helmet({contentSecurityPolicy: false}))
+
 app.use(morgan())
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+});
+
+app.use(limiter);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(process.cwd(), 'client', 'index.html'))
