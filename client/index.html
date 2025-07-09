@@ -91,7 +91,7 @@
 
   <script type="module">
     import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-    const socket = io();
+    const socket = io("https://realtime-chat-mb0z.onrender.com");
     const my_id = socket.id;
 
     const SEND_BUTTON = document.getElementById("msg-send");
