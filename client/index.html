@@ -25,6 +25,7 @@
 
   <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
 <body>
@@ -90,7 +91,7 @@
 
   <script type="module">
     import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
-    const socket = io("https://realtime-chat-mb0z.onrender.com");
+    const socket = io();
     const my_id = socket.id;
 
     const SEND_BUTTON = document.getElementById("msg-send");
@@ -113,8 +114,6 @@
       const text = document.createElement("p");
       const name = document.createElement("p");
       name.style.color = "yellow";
-      name.style.order = "1"
-      text.style.order = "2"
       text.textContent = data;
       name.textContent = `usuario: ${user ?? "invitado"}`;
       const contenedor = document.getElementById("container");
@@ -124,7 +123,7 @@
     }
 
     socket.on('message', (args) => {
-      newDomElement(args, user);
+      newDomElement(args.text, args.user);
     });
 
     SEND_BUTTON.addEventListener('click', function() {
@@ -133,7 +132,7 @@
         alert("No se puede enviar ese mensaje!");
         return;
       } else {
-        socket.emit("message", MSG.value);
+        socket.emit("message", { user: user, text: MSG.value });
         MSG.value = '';
       }
     });
@@ -150,7 +149,7 @@
         if (MSG.value === '') {
           alert("No se puede enviar ese mensaje!");
         } else {
-          socket.emit("message", MSG.value);
+          socket.emit("message", { user: user, text: MSG.value });
           MSG.value = '';
         }
       }

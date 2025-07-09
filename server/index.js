@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'
-//import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'node:path';
 import { Server } from 'socket.io'
@@ -20,8 +19,7 @@ io.on('connection', (socket) => {
     console.log("Nueva conexion!", socket.id);
 
     socket.on('message', (msg) => {
-        console.log(msg);
-        io.emit("message", msg);
+        io.emit("message", { user: msg.user, text: msg.text })
     })
     
     socket.on('disconnect', () => {
