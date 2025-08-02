@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import path from 'node:path';
 import { Server } from 'socket.io'
 import { createServer } from 'node:http';
-import helmet from 'helmet';
+import helmet, { xFrameOptions } from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 dotenv.config();
@@ -38,7 +38,7 @@ app.use(cors({
     credentials: true
 }))
 
-app.use(helmet({contentSecurityPolicy: false}))
+app.use(helmet({contentSecurityPolicy: false}, {xFrameOptions: false}))
 
 app.use(morgan())
 
